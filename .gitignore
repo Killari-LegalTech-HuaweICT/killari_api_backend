@@ -1,0 +1,20 @@
+# Entornos virtuales
+venv/
+.venv/
+.env
+
+# Archivos de caché
+__pycache__/
+*.pyc
+
+# Archivos de la IDE (ej. VS Code)
+.vscode/
+
+# Logs y Datos
+*.log
+/data
+/logs
+/tmp
+
+# Archivos de Huawei Cloud SDK y ModelArts
+.modelarts/
