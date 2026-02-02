@@ -1,5 +1,10 @@
 # Requerimientos de Python para pip (incluir SDKs de Huawei) 
-fastapi 
-uvicorn 
-huaweicloud-sdk-obs 
-huaweicloudsdkcore 
+#fastapi 
+#uvicorn 
+#huaweicloud-sdk-obs 
+#huaweicloudsdkcore 
+
+flask
+flask-sqlalchemy
+pymysql
+werkzeug

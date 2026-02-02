@@ -1,0 +1,57 @@
+CREATE DATABASE IF NOT EXISTS sistema_legal;
+USE sistema_legal;
+
+-- 1. Tabla: usuario (DNI como ID)
+CREATE TABLE `usuario` (
+  `dni` CHAR(8) NOT NULL,
+  `nombres` VARCHAR(100) NOT NULL,
+  `apellidos` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,   -- 🔐 contraseña en hash
+  `rol` ENUM('ADMIN', 'USER', 'INVITADO') DEFAULT 'USER',
+  `estado` TINYINT(1) DEFAULT 1,
+  PRIMARY KEY (`dni`)
+) ENGINE=InnoDB;
+
+-- 2. Tabla: agraviado (DNI como ID)
+CREATE TABLE `agraviado` (
+  `dni` CHAR(8) NOT NULL,
+  `nombres` VARCHAR(100) NOT NULL,
+  `apellidos` VARCHAR(100) NOT NULL,
+  `fecha_nacimiento` DATE,
+  `direccion` TEXT,
+  `telefono` VARCHAR(20),
+  PRIMARY KEY (`dni`)
+) ENGINE=InnoDB;
+
+-- 3. Tabla: caso
+CREATE TABLE `caso` (
+  `id_caso` INT NOT NULL AUTO_INCREMENT,
+  `numero_caso` VARCHAR(50) NOT NULL,
+  `tipo_caso` VARCHAR(100),
+  `fecha_registro` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `estado` ENUM('ABIERTO', 'CERRADO', 'EN_PROCESO') DEFAULT 'ABIERTO',
+  `dni_usuario` CHAR(8) NOT NULL,
+  `dni_agraviado` CHAR(8) NOT NULL,
+  PRIMARY KEY (`id_caso`),
+  CONSTRAINT `fk_caso_usuario`
+    FOREIGN KEY (`dni_usuario`) REFERENCES `usuario` (`dni`),
+  CONSTRAINT `fk_caso_agraviado`
+    FOREIGN KEY (`dni_agraviado`) REFERENCES `agraviado` (`dni`)
+) ENGINE=InnoDB;
+
+-- 4. Tabla: elemento_conviccion
+CREATE TABLE `elemento_conviccion` (
+  `id_elemento` INT NOT NULL AUTO_INCREMENT,
+  `id_caso` INT NOT NULL,
+  `tipo` ENUM('DOCUMENTO', 'AUDIO', 'VIDEO', 'OTRO'),
+  `descripcion` TEXT,
+  `archivo_url` TEXT,
+  `audio_url` TEXT,
+  `transcripcion` LONGTEXT,
+  `boceto_redactado` LONGTEXT,
+  `fecha_registro` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_elemento`),
+  CONSTRAINT `fk_elemento_caso`
+    FOREIGN KEY (`id_caso`) REFERENCES `caso` (`id_caso`)
+    ON DELETE CASCADE
+) ENGINE=InnoDB;
